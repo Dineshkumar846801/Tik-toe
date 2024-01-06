@@ -27,6 +27,30 @@
 </body>
 <script>
    let rowContains =  document.querySelectorAll('[id^="row_"]');
+
+   let winnerGame = [
+    [-1,-1,-1],
+    [-1,-1,-1],
+    [-1,-1,-1]
+   ]
+
+   const playerDetails = {
+    0:{
+        symbol:'O',
+        backgroundColor:'red'
+    },
+    1:{
+        symbol:'X',
+        backgroundColor:'yellow'
+    }
+   }
+   function renderBox(e){
+    console.log(e.currentTarget.id.split('_'))
+   }
+   rowContains.forEach((rowItems)=>rowItems.addEventListener('click',renderBox))
+
    
+   
+
 </script>
 </html>
