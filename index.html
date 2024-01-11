@@ -1,56 +1,156 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+        crossorigin="anonymous"></script>
     <title>Document</title>
-    <link rel="stylesheet" href="./style.css">
-   </head>
-<body>
+    <style>
+        .boxes {
+            background-color: red;
+            height: 150px;
+            width: 150px;
+            border-radius: 5px;
+            margin: 6px;
 
-    <div class="container">
-        <h1>Active Player: <span id="active_player"></span></h1>
-        <div>
-            <div class="box">
-                <div id="row_0_0" class="boxes">X</div>
-                <div id="row_0_1" class="boxes">X</div>
-                <div id="row_0_2" class="boxes">X</div>
-                <div id="row_1_0" class="boxes">X</div>
-                <div id="row_1_1" class="boxes">X</div>
-                <div id="row_1_2" class="boxes">X</div>
-                <div id="row_2_0" class="boxes">X</div>
-                <div id="row_2_1" class="boxes">X</div>
-                <div id="row_2_2" class="boxes">X</div>
+            justify-content: center;
+            align-items: center;
+            font-size: 100px;
+            cursor: pointer;
+            display: inline-flex;
+
+        }
+
+        .startgame {
+            text-align: center;
+            font-size: 80px;
+            margin: 0px;
+        }
+
+        .btn-danger {
+            text-align: center;
+            padding: 5px 20px;
+            margin: auto;
+        }
+
+        .boxes:click {
+            position: relative;
+        }
+    </style>
+</head>
+
+<body>
+    <h5 class="startgame">Start the Game</h5>
+    <div class="container" style="height:90vh">
+        <div class="row">
+            <div class="col-12">
+                <div class="outer">
+                    <div class="inner d-grid justify-content-center">
+                        <div class="box">
+                            <div id="r1_c1" class="button boxes"></div>
+                            <div id="r1_c2" class="button boxes"></div>
+                            <div id="r1_c3" class="button boxes"></div>
+                        </div>
+                        <div class="box">
+                            <div id="r2_c1" class="button boxes"></div>
+                            <div id="r2_c2" class="button boxes"></div>
+                            <div id="r2_c3" class="button boxes"></div>
+                        </div>
+                        <div class="box">
+                            <div id="r3_c1" class="button boxes"></div>
+                            <div id="r3_c2" class="button boxes"></div>
+                            <div id="r3_c3" class="button boxes"></div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
+
+        <div style="text-align: center;">
+            <button class="btn btn-danger " style="border-radius: 0px;" onclick="resetGame()">Reset Game</button>
+            <button class="btn btn-primary " style="border-radius: 0px;" onclick="check()">Check</button>
+        </div>
     </div>
+
 </body>
 <script>
-   let rowContains =  document.querySelectorAll('[id^="row_"]');
-
-   let winnerGame = [
-    [-1,-1,-1],
-    [-1,-1,-1],
-    [-1,-1,-1]
-   ]
-
-   const playerDetails = {
-    0:{
-        symbol:'O',
-        backgroundColor:'red'
-    },
-    1:{
-        symbol:'X',
-        backgroundColor:'yellow'
+    let allTacs = document.querySelectorAll('.boxes');
+    let winner = [[1, 2, 3], [4, 5, 6], [7, 8, 9]];
+    let player = 0;
+    function gameComplete(allTacs) {
+        let record = [];
+        for (let i = 0; i < allTacs.length; i++) {
+            allTacs[i].addEventListener('click', (ele, i) => {
+                if (player % 2 == 0) {
+                    if (ele.target.innerHTML == '')
+                        ele.target.innerHTML = 'O';
+                } else {
+                    if (ele.target.innerHTML == '')
+                        ele.target.innerHTML = 'X';
+                }
+                player = player + 1;
+            })
+            record.push(allTacs[i])
+        }
+        return record;
     }
-   }
-   function renderBox(e){
-    console.log(e.currentTarget.id.split('_'))
-   }
-   rowContains.forEach((rowItems)=>rowItems.addEventListener('click',renderBox))
+    gameComplete(allTacs);
 
-   
-   
+    function resetGame() {
+        for (let i = 0; i < gameComplete(allTacs).length; i++) {
+            allTacs[i].innerHTML = '';
+        }
 
+
+    }
+    function check() {
+        const getCellValue = (id) => document.querySelector(`#${id}`).textContent || '';
+
+        var  r1_c1 = getCellValue("r1_c1"),
+             r1_c2 = getCellValue("r1_c2"),
+             r1_c3 = getCellValue("r1_c3"),
+            
+             r2_c1 =  getCellValue("r2_c1"),
+             r2_c2 = getCellValue("r2_c2"),
+             r2_c3 =  getCellValue("r2_c3"),
+
+             r3_c1 =  getCellValue("r3_c1"),
+             r3_c2 = getCellValue("r3_c2"),
+             r3_c3 =  getCellValue("r3_c3");
+            
+            //row wise matching
+             if(r1_c1 === r1_c2 && r1_c2 === r1_c3){
+               return alert(`Winner is ${r1_c1}`);
+             }else if(r2_c1 === r2_c2 && r2_c2 === r2_c3){
+                return alert(`Winner is ${r2_c1}`);
+             } else if(r3_c1 === r3_c2 && r3_c2 === r3_c3){
+                return alert(`Winner is ${r3_c1}`);
+             }
+             //column matching
+             else if(r1_c1 === r2_c1 && r2_c1 === r3_c1){
+                return alert(`Winner is ${r1_c1}`);
+             }
+             else if(r1_c2 === r2_c2 && r2_c2 === r3_c2){
+                return alert(`Winner is ${r1_c2}`);
+             }
+             else if(r1_c3 === r2_c3 && r2_c3 === r3_c3){
+                return alert(`Winner is ${r1_c3}`);
+             }
+             //diagnel
+             else if(r1_c1 === r2_c2 && r2_c2 === r3_c3){
+                return alert(`Winner is ${r1_c1}`);
+             }
+             else if(r1_c3 === r2_c2 && r2_c2 === r3_c1){
+                return alert(`Winner is ${r1_c3}`);
+             }
+
+
+    }
 </script>
+
 </html>
